@@ -85,7 +85,9 @@ global proc assign()
 					}
 					if ($type == "joint")  // если это кость.
 					{
-						polyCube -name "AssignedMesh1" -r ;
+						select $each;
+						polyCube;
+						Parent pCube1 $each;
 					}	
 				
 			}
