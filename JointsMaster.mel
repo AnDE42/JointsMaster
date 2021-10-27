@@ -56,13 +56,6 @@ formLayout -edit
 myForm;
 showWindow myWindow;
 
-
-//Click one object
-//Click another object
-//Parent constrain 
-//Scale constrain
-//repeat xxx times with loads of objects.
-
 global proc createObj() 
 {
      string $sel[] = `ls -sl`;
