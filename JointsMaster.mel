@@ -1,0 +1,94 @@
+//иксформы и трансформацию матрицы
+//MyCharm and PyCharm install
+
+
+//Привязка длинеы кости к масштабу
+//Боксы не только по костям, но и по сочленияям. С отдельным масштабированием.
+//parent constraint
+//&
+//сconnect attribuees
+//из скрипта мо;но было регулировать скейл)
+
+//ToDo:
+//1.Колени на сочлениях
+//2.Сделать привязыку скейла бокса от длины кости
+//3.Ползунок на скейл коленей
+//4.Ползунок для скейла боксов на костях (ширину и высоту, т.к длина бокса привязана к длине кости)
+//5.Ползунок на скейл(по оставшимся осям ) боксов
+//6.Перевести это бархло на питон
+//7.Кнопка апдейт для перестройки боксов по костям, когда они подвигаются.
+//8.Чтобы работало через API
+
+//Говорить об идеях о задачах
+
+
+window -title "JointMaster1" -widthHeight 400 150 myWindow;
+
+formLayout -numberOfDivisions 100 myForm;
+     radioButtonGrp
+          -numberOfRadioButtons 2
+          -label "select type"
+          -labelArray2 "sphere" "cube"
+          -select 1
+     myRadBtnGrp;
+
+     floatSliderGrp -label "size" -field true
+          -minValue 1.0 -maxValue 100.0
+          -value 1
+     mySlider;
+
+     //button -label "Get" -command "getj()" myBtn1; //empty for now
+     button -label "Assign" -command "assign()" myBtn2;
+     button -label "Create mesh" -command "createObj()" myBtn3; //Создать меш с опциями на gui
+
+formLayout -edit
+     -attachForm myRadBtnGrp "top" 10
+     -attachForm myRadBtnGrp "left" -50
+     -attachForm mySlider "top" 40
+     -attachForm mySlider "left" -50
+     //-attachForm myBtn1 "bottom" 10
+     //-attachForm myBtn1 "left" 10
+     -attachForm myBtn2 "bottom" 10
+     -attachForm myBtn2 "left" 15
+     -attachForm myBtn3 "bottom" 10
+     -attachForm myBtn3 "left" 65
+myForm;
+showWindow myWindow;
+
+
+//Click one object
+//Click another object
+//Parent constrain 
+//Scale constrain
+//repeat xxx times with loads of objects.
+
+global proc createObj() 
+{
+     string $sel[] = `ls -sl`;
+		 if (`radioButtonGrp -q -select myRadBtnGrp` == 1) polySphere;
+		 if (`radioButtonGrp -q -select myRadBtnGrp` == 2) polyCube;
+		 float $scaleVal = `floatSliderGrp -q -value mySlider`;
+		 scale $scaleVal $scaleVal $scaleVal;
+
+}
+global proc assign() 
+{
+	 select -hierarchy; //выбрать все объекты в иерархии
+	 string $jointsHirearchy[]=`ls -sl`; //сохранить выбранные объекты в массив
+		 for ($each in $jointsHirearchy) // пройтись по всем объектам в иерархии
+			{
+				string $type =`nodeType $each`;// проверить тип объекта
+					if ($type != "joint")  // если это не кость...
+					{
+						select -tgl $each; // ...снять выделение
+					}
+					if ($type == "joint")  // если это кость.
+					{
+						polyCube -name "AssignedMesh1" -r ;
+					}	
+				
+			}
+}
+                
+global proc getj() {}
+
